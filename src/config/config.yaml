@@ -1,0 +1,83 @@
+# ============================================
+# 🎬 YouTube Shorts 자동화 설정 파일
+# ============================================
+# 이 파일을 수정하여 설정을 변경할 수 있습니다.
+# API 키는 GitHub Secrets에서 관리합니다.
+# ============================================
+
+# ----- 채널 설정 -----
+channels:
+  korean:
+    name: "뇌를 깨우는 30초"
+    language: "ko-KR"
+    upload_time: "19:00"
+    timezone: "Asia/Seoul"
+    enabled: true
+    
+  english:
+    name: "Mind in 30 Seconds"
+    language: "en-US"
+    upload_time: "10:00"
+    timezone: "Asia/Seoul"
+    enabled: true
+
+# ----- 영상 설정 -----
+video:
+  duration: 30          # 초
+  width: 1080
+  height: 1920
+  fps: 30
+  format: "mp4"
+
+# ----- 옵션 설정 (선택 가능) -----
+options:
+  # 나레이션 스타일: friendly / calm / energetic
+  narration_style: "friendly"
+  
+  # 자막 스타일: minimal / emphasis / animated
+  subtitle_style: "minimal"
+  
+  # TTS 엔진: edge-tts / gtts
+  tts_engine: "edge-tts"
+  
+  # 자동 업로드 여부
+  auto_upload: true
+  
+  # 업로드 공개 상태: private / public / unlisted
+  upload_visibility: "private"
+  
+  # 인트로 사용 여부
+  use_intro: false
+
+# ----- 자막 설정 -----
+subtitle:
+  font_korean: "NanumSquareRoundEB"
+  font_english: "Montserrat-Bold"
+  font_size: 55
+  stroke_width: 3
+  stroke_color: "#000000"
+  position: "center"        # center / bottom
+  margin_bottom: 150        # 하단 여백 (픽셀)
+
+# ----- 알림 설정 -----
+notification:
+  telegram:
+    enabled: true           # true / false
+    
+# ----- 분석 설정 -----
+analytics:
+  google_sheets:
+    enabled: true           # true / false (옵션)
+  local_csv:
+    enabled: true           # Sheets 미사용 시에도 로컬 CSV 기록
+
+# ----- 중복 방지 -----
+content:
+  prevent_duplicates: true
+  duplicate_check_days: 30  # 30일 이내 중복 방지
+
+# ----- Google Drive 설정 -----
+storage:
+  google_drive:
+    enabled: true
+    folder_name: "YouTube_Shorts"
