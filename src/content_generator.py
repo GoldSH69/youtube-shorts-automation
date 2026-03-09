@@ -22,6 +22,8 @@ class ContentGenerator:
             raise ValueError("GEMINI_API_KEY 환경변수가 설정되지 않았습니다.")
         
         genai.configure(api_key=api_key)
+        
+        # 작동하는 모델 찾기
         self.model = self._get_working_model()
         
         self.config = load_config()
@@ -29,41 +31,35 @@ class ContentGenerator:
         self.used_topics = load_used_topics()
     
     def _get_working_model(self):
-    """작동하는 Gemini 모델 찾기"""
-    import google.generativeai as genai
-    
-    model_names = [
-        'gemini-1.5-flash',
-        'gemini-1.5-pro',
-        'gemini-pro',
-        'gemini-1.0-pro',
-        'models/gemini-1.5-flash',
-        'models/gemini-pro',
-    ]
-    
-    for model_name in model_names:
-        try:
-            model = genai.GenerativeModel(model_name)
-            # 간단한 테스트
-            model.generate_content("test")
-            logger.info(f"Gemini 모델 선택: {model_name}")
-            return model
-        except:
-            continue
-    
-    # 기본값
-    return genai.GenerativeModel('gemini-1.5-flash')
-    
+        """작동하는 Gemini 모델 찾기"""
+        model_names = [
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
+            'gemini-pro',
+            'gemini-1.0-pro',
+            'models/gemini-1.5-flash',
+            'models/gemini-pro',
+        ]
+        
+        for model_name in model_names:
+            try:
+                model = genai.GenerativeModel(model_name)
+                # 간단한 테스트
+                response = model.generate_content("Hi")
+                if response.text:
+                    logger.info(f"Gemini 모델 선택됨: {model_name}")
+                    return model
+            except Exception as e:
+                logger.warning(f"모델 {model_name} 실패: {str(e)[:30]}")
+                continue
+        
+        # 마지막 시도
+        logger.warning("기본 모델로 시도")
+        return genai.GenerativeModel('gemini-1.5-flash')
+        
     async def generate(self, day_config: dict, language: str) -> dict:
         """
         스크립트 및 메타데이터 생성
-        
-        Args:
-            day_config: 오늘의 설정 (topic, keywords 등)
-            language: "korean" 또는 "english"
-            
-        Returns:
-            dict: {script, title, description, tags}
         """
         try:
             # 1. 스크립트 생성
@@ -152,7 +148,6 @@ JSON 형식으로만 응답해. 다른 텍스트 없이.
         
         # JSON 파싱
         try:
-            # JSON 부분만 추출
             text = response.text.strip()
             if '```json' in text:
                 text = text.split('```json')[1].split('```')[0]
@@ -183,4 +178,4 @@ JSON 형식으로만 응답해. 다른 텍스트 없이.
             if topic_data.get('day') == day:
                 recent.append(topic_data.get('summary', ''))
         
-        return recent[-10:]  # 최근 10개만
+        return recent[-10:]
