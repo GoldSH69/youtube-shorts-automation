@@ -19,31 +19,36 @@ def test_gemini():
             print("❌ GEMINI_API_KEY not found")
             return False
         
+        print(f"  API Key (첫 10자): {api_key[:10]}...")
+        
         genai.configure(api_key=api_key)
         
-        # 여러 모델명 시도
-        model_names = [
-            'gemini-1.5-flash',
-            'gemini-1.5-pro', 
-            'gemini-pro',
-            'gemini-1.0-pro',
-            'models/gemini-1.5-flash',
-            'models/gemini-pro',
-        ]
-        
-        for model_name in model_names:
-            try:
-                print(f"  Trying model: {model_name}")
-                model = genai.GenerativeModel(model_name)
-                response = model.generate_content("Say 'Hello' in Korean")
-                print(f"✅ Gemini Success with '{model_name}': {response.text[:50]}")
-                return True
-            except Exception as e:
-                print(f"  ⚠️ {model_name} failed: {str(e)[:50]}")
-                continue
-        
-        print("❌ All Gemini models failed")
-        return False
+        # 사용 가능한 모델 목록 출력
+        print("  📋 사용 가능한 모델 목록:")
+        try:
+            models = genai.list_models()
+            model_names = []
+            for m in models:
+                if 'generateContent' in str(m.supported_generation_methods):
+                    print(f"    ✓ {m.name}")
+                    model_names.append(m.name)
+            
+            if not model_names:
+                print("    ⚠️ 사용 가능한 모델이 없습니다!")
+                return False
+                
+            # 첫 번째 사용 가능한 모델로 테스트
+            model_name = model_names[0].replace('models/', '')
+            print(f"  🎯 테스트 모델: {model_name}")
+            
+            model = genai.GenerativeModel(model_name)
+            response = model.generate_content("Say hello in Korean")
+            print(f"✅ Gemini Success: {response.text[:50]}")
+            return True
+            
+        except Exception as e:
+            print(f"  ❌ 모델 목록 조회 실패: {str(e)}")
+            return False
         
     except Exception as e:
         print(f"❌ Gemini Error: {str(e)}")
