@@ -59,32 +59,44 @@ def test_pexels():
         return False
 
 async def test_tts():
-    """Edge TTS 테스트"""
-    print("🎙️ Testing Edge TTS...")
+    """TTS 테스트 (Edge TTS + gTTS)"""
+    print("🎙️ Testing TTS...")
+    
+    # 1. Edge TTS 시도
     try:
         import edge_tts
-        import asyncio
         
-        # 여러 번 재시도
-        for attempt in range(3):
+        for attempt in range(2):
             try:
-                communicate = edge_tts.Communicate("테스트 음성입니다.", "ko-KR-InJoonNeural")
+                communicate = edge_tts.Communicate("테스트", "ko-KR-InJoonNeural")
                 await communicate.save("test_audio.mp3")
                 
-                if os.path.exists("test_audio.mp3"):
+                if os.path.exists("test_audio.mp3") and os.path.getsize("test_audio.mp3") > 0:
                     size = os.path.getsize("test_audio.mp3")
                     os.remove("test_audio.mp3")
-                    print(f"✅ TTS Success: Generated {size} bytes")
+                    print(f"✅ Edge TTS Success: {size} bytes")
                     return True
-            except Exception as e:
-                print(f"⚠️ TTS attempt {attempt + 1} failed, retrying...")
-                await asyncio.sleep(2)
-        
-        print("❌ TTS Error: All attempts failed")
-        return False
+            except:
+                await asyncio.sleep(1)
     except Exception as e:
-        print(f"❌ TTS Error: {str(e)}")
-        return False
+        print(f"⚠️ Edge TTS failed: {str(e)}")
+    
+    # 2. gTTS 시도
+    try:
+        from gtts import gTTS
+        
+        tts = gTTS(text="테스트 음성입니다", lang='ko', slow=False)
+        tts.save("test_audio.mp3")
+        
+        if os.path.exists("test_audio.mp3") and os.path.getsize("test_audio.mp3") > 0:
+            size = os.path.getsize("test_audio.mp3")
+            os.remove("test_audio.mp3")
+            print(f"✅ gTTS Success: {size} bytes")
+            return True
+    except Exception as e:
+        print(f"❌ gTTS also failed: {str(e)}")
+    
+    return False
 
 async def test_telegram():
     """Telegram 테스트"""
