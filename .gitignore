@@ -1,0 +1,46 @@
+# ============================================
+# YouTube Shorts Automation - Git Ignore
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+
+# 임시 파일
+temp/
+*.mp4
+*.mp3
+*.wav
+
+# 출력 파일 (로컬에서만)
+output/
+
+# API 키 및 인증
+*.json
+!config/*.yaml
+config/youtube_token.pickle
+client_secret*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 로그
+*.log
+logs/
+
+# 테스트
+test_*.mp4
+test_*.mp3
