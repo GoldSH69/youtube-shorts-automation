@@ -1,0 +1,53 @@
+# ============================================
+# 🧪 수동 테스트 워크플로우
+# ============================================
+# API 연결 및 기본 기능 테스트용
+# ============================================
+
+name: 🧪 Manual Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: '테스트 유형'
+        required: true
+        type: choice
+        options:
+          - 'all'
+          - 'gemini'
+          - 'pexels'
+          - 'tts'
+          - 'telegram'
+          - 'drive'
+
+jobs:
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 📦 Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install -r requirements.txt
+      
+      - name: 🧪 Run Test
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: |
+          cd src
+          python test_apis.py ${{ github.event.inputs.test_type }}
