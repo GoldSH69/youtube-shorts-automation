@@ -7,6 +7,7 @@ google-generativeai==0.7.0
 
 # Text-to-Speech
 edge-tts==6.1.9
+gTTS==2.5.0
 
 # Video Processing
 moviepy==1.0.3
