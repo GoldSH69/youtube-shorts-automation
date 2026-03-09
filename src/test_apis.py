@@ -63,18 +63,25 @@ async def test_tts():
     print("🎙️ Testing Edge TTS...")
     try:
         import edge_tts
+        import asyncio
         
-        communicate = edge_tts.Communicate("테스트 음성입니다.", "ko-KR-InJoonNeural")
-        await communicate.save("test_audio.mp3")
+        # 여러 번 재시도
+        for attempt in range(3):
+            try:
+                communicate = edge_tts.Communicate("테스트 음성입니다.", "ko-KR-InJoonNeural")
+                await communicate.save("test_audio.mp3")
+                
+                if os.path.exists("test_audio.mp3"):
+                    size = os.path.getsize("test_audio.mp3")
+                    os.remove("test_audio.mp3")
+                    print(f"✅ TTS Success: Generated {size} bytes")
+                    return True
+            except Exception as e:
+                print(f"⚠️ TTS attempt {attempt + 1} failed, retrying...")
+                await asyncio.sleep(2)
         
-        if os.path.exists("test_audio.mp3"):
-            size = os.path.getsize("test_audio.mp3")
-            os.remove("test_audio.mp3")
-            print(f"✅ TTS Success: Generated {size} bytes")
-            return True
-        else:
-            print("❌ TTS Error: File not created")
-            return False
+        print("❌ TTS Error: All attempts failed")
+        return False
     except Exception as e:
         print(f"❌ TTS Error: {str(e)}")
         return False
