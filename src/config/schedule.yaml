@@ -1,0 +1,88 @@
+# ============================================
+# 📅 요일별 콘텐츠 스케줄
+# ============================================
+
+schedule:
+  monday:
+    topic_kr: "심리학 퀴즈/사실"
+    topic_en: "Psychology Quiz & Facts"
+    keywords: ["psychology", "brain", "mind", "facts"]
+    color_primary: "#9B59B6"      # 퍼플
+    color_secondary: "#E8DAEF"
+    color_text: "#FFFFFF"
+    bgm_style: "mystery"
+    voice_kr: "ko-KR-InJoonNeural"
+    voice_en: "en-US-GuyNeural"
+    voice_style: "energetic"
+    
+  tuesday:
+    topic_kr: "성공한 사람들의 심리 패턴"
+    topic_en: "Psychology of Successful People"
+    keywords: ["success", "mindset", "achievement", "business"]
+    color_primary: "#F1C40F"      # 골드
+    color_secondary: "#1A1A1A"
+    color_text: "#FFFFFF"
+    bgm_style: "inspirational"
+    voice_kr: "ko-KR-InJoonNeural"
+    voice_en: "en-US-GuyNeural"
+    voice_style: "calm"
+    
+  wednesday:
+    topic_kr: "뇌과학 기반 생산성 팁"
+    topic_en: "Brain Science Productivity Tips"
+    keywords: ["productivity", "brain", "focus", "efficiency"]
+    color_primary: "#3498DB"      # 블루
+    color_secondary: "#EBF5FB"
+    color_text: "#FFFFFF"
+    bgm_style: "focus"
+    voice_kr: "ko-KR-SunHiNeural"
+    voice_en: "en-US-JennyNeural"
+    voice_style: "calm"
+    
+  thursday:
+    topic_kr: "다크심리학"
+    topic_en: "Dark Psychology"
+    keywords: ["dark", "psychology", "manipulation", "mystery"]
+    color_primary: "#E74C3C"      # 레드
+    color_secondary: "#1A1A1A"
+    color_text: "#FFFFFF"
+    bgm_style: "dark"
+    voice_kr: "ko-KR-InJoonNeural"
+    voice_en: "en-US-GuyNeural"
+    voice_style: "calm"
+    
+  friday:
+    topic_kr: "자기계발 심리 해킹"
+    topic_en: "Self-Improvement Psychology Hacks"
+    keywords: ["self-improvement", "growth", "motivation", "success"]
+    color_primary: "#2ECC71"      # 그린
+    color_secondary: "#D5F5E3"
+    color_text: "#FFFFFF"
+    bgm_style: "energetic"
+    voice_kr: "ko-KR-SunHiNeural"
+    voice_en: "en-US-JennyNeural"
+    voice_style: "energetic"
+    
+  saturday:
+    topic_kr: "심리학으로 보는 운세/성격"
+    topic_en: "Zodiac Psychology & Personality"
+    keywords: ["zodiac", "personality", "astrology", "horoscope"]
+    color_primary: "#9B59B6"      # 퍼플
+    color_secondary: "#FADBD8"
+    color_text: "#FFFFFF"
+    bgm_style: "mystical"
+    voice_kr: "ko-KR-SunHiNeural"
+    voice_en: "en-US-JennyNeural"
+    voice_style: "calm"
+    
+  sunday:
+    topic_kr: "심리 테스트/실험"
+    topic_en: "Psychology Tests & Experiments"
+    keywords: ["test", "experiment", "psychology", "fun"]
+    color_primary: "#FF9800"      # 오렌지
+    color_secondary: "#FEF9E7"
+    color_text: "#FFFFFF"
+    bgm_style: "fun"
+    voice_kr: "ko-KR-InJoonNeural"
+    voice_en: "en-US-GuyNeural"
+    voice_style: "energetic"
