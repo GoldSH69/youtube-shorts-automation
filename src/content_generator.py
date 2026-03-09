@@ -22,12 +22,38 @@ class ContentGenerator:
             raise ValueError("GEMINI_API_KEY 환경변수가 설정되지 않았습니다.")
         
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        self.model = self._get_working_model()
         
         self.config = load_config()
         self.prompts = load_prompts()
         self.used_topics = load_used_topics()
-        
+    
+    def _get_working_model(self):
+    """작동하는 Gemini 모델 찾기"""
+    import google.generativeai as genai
+    
+    model_names = [
+        'gemini-1.5-flash',
+        'gemini-1.5-pro',
+        'gemini-pro',
+        'gemini-1.0-pro',
+        'models/gemini-1.5-flash',
+        'models/gemini-pro',
+    ]
+    
+    for model_name in model_names:
+        try:
+            model = genai.GenerativeModel(model_name)
+            # 간단한 테스트
+            model.generate_content("test")
+            logger.info(f"Gemini 모델 선택: {model_name}")
+            return model
+        except:
+            continue
+    
+    # 기본값
+    return genai.GenerativeModel('gemini-1.5-flash')
+    
     async def generate(self, day_config: dict, language: str) -> dict:
         """
         스크립트 및 메타데이터 생성
