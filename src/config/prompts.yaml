@@ -1,0 +1,196 @@
+# ============================================
+# 🤖 AI 프롬프트 템플릿
+# ============================================
+
+# ----- 기본 시스템 프롬프트 -----
+system_prompt:
+  korean: |
+    너는 유튜브 쇼츠 전문 스크립트 작가야.
+    30초 분량의 짧고 임팩트 있는 스크립트를 작성해.
+    
+    규칙:
+    1. 시청자의 관심을 첫 3초 안에 사로잡아야 해
+    2. 친근한 대화체로 작성해 (반말 OK)
+    3. 글자 수: 150-200자 내외
+    4. 한 문장은 짧게 (15자 이내)
+    5. 감정을 자극하는 후크로 시작해
+    6. 마지막에 생각해볼 포인트나 질문 추가
+    
+  english: |
+    You are a YouTube Shorts script expert.
+    Write short, impactful scripts for 30-second videos.
+    
+    Rules:
+    1. Hook viewers in the first 3 seconds
+    2. Use conversational, friendly tone
+    3. Word count: 60-80 words
+    4. Keep sentences short (under 10 words)
+    5. Start with an emotional hook
+    6. End with a thought-provoking point or question
+
+# ----- 요일별 프롬프트 -----
+topic_prompts:
+  monday:
+    korean: |
+      주제: 심리학 퀴즈 또는 놀라운 심리학 사실
+      
+      형식:
+      - "너 이거 알아?" 또는 질문으로 시작
+      - 흥미로운 심리학 사실 1개 소개
+      - 왜 그런지 간단한 설명
+      - 마무리 질문 또는 생각해볼 포인트
+      
+      예시 주제: 첫인상, 거짓말 탐지, 색깔 심리, 결정 장애 등
+      
+    english: |
+      Topic: Psychology quiz or surprising psychology fact
+      
+      Format:
+      - Start with "Did you know?" or a question
+      - Share 1 interesting psychology fact
+      - Brief explanation of why
+      - End with a question or thought
+      
+      Example topics: First impressions, lie detection, color psychology, decision paralysis
+
+  tuesday:
+    korean: |
+      주제: 성공한 사람들의 심리 패턴
+      
+      형식:
+      - 유명인/CEO/성공한 사람 언급 (또는 일반화)
+      - 그들의 특별한 사고방식 1가지
+      - 우리가 배울 수 있는 점
+      - 액션 포인트 또는 질문
+      
+    english: |
+      Topic: Psychology patterns of successful people
+      
+      Format:
+      - Mention a famous person/CEO (or generalize)
+      - One special mindset they have
+      - What we can learn
+      - Action point or question
+
+  wednesday:
+    korean: |
+      주제: 뇌과학 기반 생산성/집중력 팁
+      
+      형식:
+      - 공감가는 문제 상황으로 시작 (집중 안 됨, 미루기 등)
+      - 뇌과학적 원리 간단 설명
+      - 실천 가능한 팁 1가지
+      - "오늘 바로 해봐!"로 마무리
+      
+    english: |
+      Topic: Brain science productivity/focus tips
+      
+      Format:
+      - Start with relatable problem (can't focus, procrastination)
+      - Brief brain science explanation
+      - One actionable tip
+      - End with "Try it today!"
+
+  thursday:
+    korean: |
+      주제: 다크심리학 - 사람들이 모르는 심리 조작 기법
+      
+      형식:
+      - 호기심 유발하는 시작 ("이 기법 당해봤을걸?")
+      - 심리 조작/설득 기법 1가지
+      - 실제 사용 예시
+      - 방어하는 방법 또는 경고
+      
+      ⚠️ 교육 목적으로 작성, 악용 방지 메시지 포함
+      
+    english: |
+      Topic: Dark Psychology - manipulation techniques people don't know
+      
+      Format:
+      - Curiosity-inducing start
+      - One manipulation/persuasion technique
+      - Real-world example
+      - How to defend or warning
+      
+      ⚠️ Educational purpose, include warning against misuse
+
+  friday:
+    korean: |
+      주제: 자기계발 심리 해킹 - 마인드셋 변화 팁
+      
+      형식:
+      - 동기부여되는 시작
+      - 심리학 기반 자기계발 팁 1가지
+      - 왜 효과적인지 설명
+      - 긍정적 마무리 + 응원
+      
+    english: |
+      Topic: Self-improvement psychology hack
+      
+      Format:
+      - Motivating start
+      - One psychology-based self-improvement tip
+      - Why it works
+      - Positive ending + encouragement
+
+  saturday:
+    korean: |
+      주제: 심리학으로 보는 성격/MBTI/심리 특성
+      
+      형식:
+      - "너 혹시 이런 사람이야?" 질문으로 시작
+      - 특정 성격 유형의 심리적 특성
+      - 장점과 주의할 점
+      - 공감 유도하는 마무리
+      
+      ※ 운세 대신 심리학 기반 성격 분석으로 대체
+      
+    english: |
+      Topic: Personality psychology / MBTI / psychological traits
+      
+      Format:
+      - Start with "Are you this type of person?"
+      - Psychological traits of a personality type
+      - Strengths and things to watch
+      - Relatable ending
+
+  sunday:
+    korean: |
+      주제: 간단한 심리 테스트 또는 유명 심리 실험 소개
+      
+      형식:
+      - "간단한 테스트 해볼까?" 또는 실험 소개
+      - 테스트 질문 또는 실험 내용
+      - 결과 해석 또는 실험 결과
+      - "댓글로 알려줘!" 참여 유도
+      
+    english: |
+      Topic: Simple psychology test or famous psychology experiment
+      
+      Format:
+      - "Let's do a quick test!" or experiment intro
+      - Test question or experiment details
+      - Result interpretation
+      - "Tell me in the comments!" engagement
+
+# ----- 제목/설명 생성 프롬프트 -----
+metadata_prompt:
+  korean: |
+    위 스크립트에 대한 유튜브 쇼츠 메타데이터를 생성해줘.
+    
+    JSON 형식으로 응답해:
+    {
+      "title": "50자 이내의 호기심 유발 제목",
+      "description": "100자 이내 설명 + 해시태그 5개",
+      "tags": ["태그1", "태그2", "태그3", "태그4", "태그5"]
+    }
+    
+  english: |
+    Generate YouTube Shorts metadata for the script above.
+    
+    Respond in JSON format:
+    {
+      "title": "Curiosity-inducing title under 50 characters",
+      "description": "Description under 100 chars + 5 hashtags",
+      "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"]
+    }
