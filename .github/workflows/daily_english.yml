@@ -1,0 +1,102 @@
+# ============================================
+# 🇺🇸 영어 채널 자동화 워크플로우
+# ============================================
+# 매일 한국시간 10:00 (UTC 01:00)에 실행
+# = 미국 동부시간 저녁 8-9시
+# ============================================
+
+name: 🇺🇸 English Shorts Daily
+
+on:
+  # 스케줄 실행 (UTC 기준)
+  schedule:
+    # 한국시간 10:00 = UTC 01:00
+    - cron: '0 1 * * *'
+  
+  # 수동 실행
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: '테스트 모드 (YouTube 업로드 스킵)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  LANGUAGE: english
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-and-upload:
+    name: 🎬 Generate English Shorts
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      # 1. 코드 체크아웃
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      
+      # 2. Python 설정
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      # 3. 시스템 의존성 설치
+      - name: 📦 Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg imagemagick
+          
+          # ImageMagick 정책 수정
+          sudo sed -i 's/rights="none" pattern="@\*"/rights="read|write" pattern="@*"/' /etc/ImageMagick-6/policy.xml || true
+      
+      # 4. Python 패키지 설치
+      - name: 📚 Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 5. 폴더 생성
+      - name: 📁 Create Directories
+        run: |
+          mkdir -p temp output data config
+      
+      # 6. 메인 스크립트 실행
+      - name: 🚀 Run Automation
+        env:
+          LANGUAGE: english
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
+          TEST_MODE: ${{ github.event.inputs.test_mode || 'false' }}
+        run: |
+          cd src
+          python main.py
+      
+      # 7. 생성된 영상 아티팩트 저장
+      - name: 💾 Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: english-video-${{ github.run_number }}
+          path: output/
+          retention-days: 7
+      
+      # 8. 데이터 파일 커밋
+      - name: 📝 Commit Data Files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/ || true
+          git diff --staged --quiet || git commit -m "📊 Update data files [skip ci]"
+          git push || true
