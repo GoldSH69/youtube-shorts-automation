@@ -80,7 +80,6 @@ jobs:
           GOOGLE_SHEETS_ID: ${{ secrets.GOOGLE_SHEETS_ID }}
           TEST_MODE: ${{ github.event.inputs.test_mode || 'false' }}
         run: |
-          cd src
           python src/main.py
       
       # 7. 생성된 영상 아티팩트 저장 (디버깅용)
