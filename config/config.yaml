@@ -19,7 +19,7 @@ channels:
     language: "en-US"
     upload_time: "10:00"
     timezone: "Asia/Seoul"
-    enabled: true
+    enabled: false
 
 # ----- 영상 설정 -----
 video:
