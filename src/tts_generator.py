@@ -1,92 +1,110 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-🎙️ TTS 음성 생성기 (Edge TTS)
+🎙️ TTS 음성 생성기 (Edge TTS + gTTS 대체)
 """
 
 import os
 import asyncio
-import edge_tts
 from utils import setup_logging
 
 logger = setup_logging()
 
 
 class TTSGenerator:
-    """Edge TTS를 사용한 음성 생성"""
+    """TTS 음성 생성 (Edge TTS 실패 시 gTTS 사용)"""
     
-    # 사용 가능한 음성 목록
+    # Edge TTS 음성 목록
     VOICES = {
-        # 한국어
         'ko-KR-InJoonNeural': '한국어 남성 (인준)',
         'ko-KR-SunHiNeural': '한국어 여성 (선희)',
-        # 영어 (미국)
         'en-US-GuyNeural': '영어 남성 (Guy)',
         'en-US-JennyNeural': '영어 여성 (Jenny)',
-        'en-US-AriaNeural': '영어 여성 (Aria)',
-        # 영어 (영국)
-        'en-GB-RyanNeural': '영국 남성 (Ryan)',
-        'en-GB-SoniaNeural': '영국 여성 (Sonia)',
+    }
+    
+    # gTTS 언어 매핑
+    GTTS_LANG = {
+        'ko-KR-InJoonNeural': 'ko',
+        'ko-KR-SunHiNeural': 'ko',
+        'en-US-GuyNeural': 'en',
+        'en-US-JennyNeural': 'en',
     }
     
     def __init__(self):
-        # temp 폴더 생성
         os.makedirs('temp', exist_ok=True)
         
     async def generate(self, text: str, voice: str, output_dir: str = "temp") -> str:
         """
         텍스트를 음성으로 변환
-        
-        Args:
-            text: 변환할 텍스트
-            voice: Edge TTS 음성 코드
-            output_dir: 출력 디렉토리
-            
-        Returns:
-            str: 생성된 음성 파일 경로
+        Edge TTS 실패 시 gTTS로 대체
         """
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, "voice.mp3")
+        
+        # 1차 시도: Edge TTS
         try:
-            # 출력 경로
-            os.makedirs(output_dir, exist_ok=True)
-            output_path = os.path.join(output_dir, "voice.mp3")
-            
-            # 음성 검증
-            if voice not in self.VOICES:
-                logger.warning(f"알 수 없는 음성: {voice}, 기본값 사용")
-                voice = 'ko-KR-InJoonNeural'
-            
-            logger.info(f"음성 생성 시작: {voice}")
-            
-            # Edge TTS 생성
-            communicate = edge_tts.Communicate(text, voice)
-            await communicate.save(output_path)
-            
-            # 파일 크기 확인
-            file_size = os.path.getsize(output_path)
-            logger.info(f"음성 파일 생성: {output_path} ({file_size} bytes)")
-            
-            return output_path
-            
+            logger.info(f"Edge TTS 시도: {voice}")
+            success = await self._try_edge_tts(text, voice, output_path)
+            if success:
+                return output_path
         except Exception as e:
-            logger.error(f"TTS 생성 실패: {str(e)}")
+            logger.warning(f"Edge TTS 실패: {str(e)}")
+        
+        # 2차 시도: gTTS
+        try:
+            logger.info("gTTS로 대체 시도...")
+            success = await self._try_gtts(text, voice, output_path)
+            if success:
+                return output_path
+        except Exception as e:
+            logger.error(f"gTTS도 실패: {str(e)}")
             raise
+        
+        raise Exception("모든 TTS 방법 실패")
+    
+    async def _try_edge_tts(self, text: str, voice: str, output_path: str) -> bool:
+        """Edge TTS 시도"""
+        import edge_tts
+        
+        for attempt in range(2):
+            try:
+                communicate = edge_tts.Communicate(text, voice)
+                await communicate.save(output_path)
+                
+                if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+                    logger.info(f"Edge TTS 성공")
+                    return True
+            except Exception as e:
+                logger.warning(f"Edge TTS 시도 {attempt + 1} 실패")
+                await asyncio.sleep(1)
+        
+        return False
+    
+    async def _try_gtts(self, text: str, voice: str, output_path: str) -> bool:
+        """gTTS 대체"""
+        from gtts import gTTS
+        
+        # 언어 결정
+        lang = self.GTTS_LANG.get(voice, 'ko')
+        
+        # gTTS 생성
+        tts = gTTS(text=text, lang=lang, slow=False)
+        tts.save(output_path)
+        
+        if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+            logger.info(f"gTTS 성공: {lang}")
+            return True
+        
+        return False
     
     async def get_audio_duration(self, audio_path: str) -> float:
-        """오디오 파일 길이 반환 (초)"""
+        """오디오 파일 길이 반환"""
         try:
             from moviepy.editor import AudioFileClip
-            
             audio = AudioFileClip(audio_path)
             duration = audio.duration
             audio.close()
-            
             return duration
         except Exception as e:
             logger.error(f"오디오 길이 측정 실패: {str(e)}")
-            return 30.0  # 기본값
-    
-    @staticmethod
-    def list_voices():
-        """사용 가능한 음성 목록 출력"""
-        for code, name in TTSGenerator.VOICES.items():
-            print(f"{code}: {name}")
+            return 30.0
