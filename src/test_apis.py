@@ -20,7 +20,7 @@ def test_gemini():
             return False
         
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         response = model.generate_content("Say 'Hello, test successful!' in Korean")
         print(f"✅ Gemini Response: {response.text[:100]}")
