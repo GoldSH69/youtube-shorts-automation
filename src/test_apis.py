@@ -20,11 +20,31 @@ def test_gemini():
             return False
         
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash-latest')
         
-        response = model.generate_content("Say 'Hello, test successful!' in Korean")
-        print(f"✅ Gemini Response: {response.text[:100]}")
-        return True
+        # 여러 모델명 시도
+        model_names = [
+            'gemini-1.5-flash',
+            'gemini-1.5-pro', 
+            'gemini-pro',
+            'gemini-1.0-pro',
+            'models/gemini-1.5-flash',
+            'models/gemini-pro',
+        ]
+        
+        for model_name in model_names:
+            try:
+                print(f"  Trying model: {model_name}")
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content("Say 'Hello' in Korean")
+                print(f"✅ Gemini Success with '{model_name}': {response.text[:50]}")
+                return True
+            except Exception as e:
+                print(f"  ⚠️ {model_name} failed: {str(e)[:50]}")
+                continue
+        
+        print("❌ All Gemini models failed")
+        return False
+        
     except Exception as e:
         print(f"❌ Gemini Error: {str(e)}")
         return False
