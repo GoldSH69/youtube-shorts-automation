@@ -33,12 +33,11 @@ class ContentGenerator:
     def _get_working_model(self):
         """작동하는 Gemini 모델 찾기"""
         model_names = [
+            'gemini-2.5-flash',      # 최신 모델 (테스트 통과!)
+            'gemini-2.0-flash',
+            'gemini-flash-latest',
+            'gemini-pro-latest',
             'gemini-1.5-flash',
-            'gemini-1.5-pro',
-            'gemini-pro',
-            'gemini-1.0-pro',
-            'models/gemini-1.5-flash',
-            'models/gemini-pro',
         ]
         
         for model_name in model_names:
