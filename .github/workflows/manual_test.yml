@@ -50,4 +50,4 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           cd src
-          python test_apis.py ${{ github.event.inputs.test_type }}
+          python src/test_apis.py ${{ github.event.inputs.test_type }}
