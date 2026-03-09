@@ -22,7 +22,7 @@ class ContentGenerator:
             raise ValueError("GEMINI_API_KEY 환경변수가 설정되지 않았습니다.")
         
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
         
         self.config = load_config()
         self.prompts = load_prompts()
